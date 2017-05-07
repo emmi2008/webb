@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ExtJS</title>
+<link rel="stylesheet" type="text/css" href="../extjs-master/resources/css/ext-all.css" />
+<!-- <script type="text/javascript" src="ext-base.js"></script> -->
+<script type="text/javascript" src="../extjs-master/ext-all.js"></script>
+<script>
+	Ext.onReady(function(){
+		Ext.create('Ext.data.Store', {
+			storeId:'simpsonsStore',
+			fields:['name', 'email', 'phone'],
+			data:{'items':[
+				{ 'name': 'Lisa',  "email":"lisa@simpsons.com",  "phone":"555-111-1224"  },
+				{ 'name': 'Bart',  "email":"bart@simpsons.com",  "phone":"555-222-1234" },
+				{ 'name': 'Homer', "email":"home@simpsons.com",  "phone":"555-222-1244"  },
+				{ 'name': 'Marge', "email":"marge@simpsons.com", "phone":"555-222-1254"  }
+			]},
+			proxy: {
+				type: 'memory',
+				reader: {
+					type: 'json',
+					root: 'items'
+				}
+			}
+		});
+
+		var grid=Ext.create('Ext.grid.Panel', {
+			//title: 'Simpsons',
+			store: Ext.data.StoreManager.lookup('simpsonsStore'),
+			columns: [
+				{ header: 'Name',  dataIndex: 'name' },
+				{ header: 'Email', dataIndex: 'email', flex: 1 },
+				{ header: 'Phone', dataIndex: 'phone' }
+			],
+			//layout:'anchor',
+			//anchor: '100%'
+			border:false,
+			layout:'fit',
+			autoHeight : true,
+			autoWidth : true
+			//height: 200,
+			//width: 400
+			//renderTo: Ext.getBody()
+		});
+		Ext.create('Ext.form.Panel', {
+			//title: '使用 FieldSet 的示例表单',
+			labelWidth: 75, // label settings here cascade unless overridden
+			url: 'save-form.php',
+			frame: true,
+			bodyStyle: 'padding:5px 5px 0',
+			width: 550,
+			height:500,
+			renderTo: Ext.getBody(),
+			layout: 'column', // 并排排列fieldsets
+			defaults: {
+				bodyPadding: 4
+			},
+			items: [{
+				//第 1 列中的  Fieldset - 通过toggle 按钮来 收缩/展开
+				xtype:'fieldset',
+				//columnWidth: 0.5,
+				title: '联系信息',
+				collapsible: true,
+				defaultType: 'textfield',
+				defaults: {anchor: '100%'},
+				layout: 'anchor',
+				items :[{
+					fieldLabel: '姓名',
+					name: 'name'
+				}, {
+					fieldLabel: '地址',
+					name: 'address'
+				}]
+			}, {
+				// 第二列中的 Fieldset -  可以通过checkbox 来收缩/展开 , 默认收缩状态, 包含一个面板
+				xtype:'fieldset',
+				title: '更多', // 指定 title 或者 checkboxToggle 配置项,都会创建 fieldset 组头(header).
+				//columnWidth: 1,
+				//checkboxToggle: true,
+				defaultType: 'textfield',
+				//collapsed: true, // 初始化为收缩状态
+				collapsible: true,
+				layout:'fit',
+				items :[grid]
+			}]
+		});
+	})
+</script>
+</head>
+<body>
+</body>
+</html>
